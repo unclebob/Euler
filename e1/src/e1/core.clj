@@ -49,23 +49,17 @@
 
 (defn lcmv [& v] (reduce lcm v))
 
-(defn sum-of-subset-lcms-up-to [cardinality subsets limit]
-  (let [tuples (filter #(= cardinality (count %)) subsets)
+(defn sum-of-subset-lcms-up-to [f subsets limit]
+  (let [tuples (filter #(f (count %)) subsets)
         lcms (map #(apply lcmv %) tuples)
         sums (map #(sum-multiple-up-to % limit) lcms)]
     (reduce + sums)))
 
 (defn fast-sum-multiples [factors limit]
   (let [facs (remove-multiples factors)
-        mults (map
-                #(sum-multiple-up-to % limit)
-                facs)
-        subsets (comb/subsets facs)
-        ]
-    (-> (reduce + mults)
-        (- (sum-of-subset-lcms-up-to 2 subsets limit))
-        (+ (sum-of-subset-lcms-up-to 3 subsets limit))
-        (- (sum-of-subset-lcms-up-to 4 subsets limit))
+        subsets (filter #(pos? (count %)) (comb/subsets facs))]
+    (- (sum-of-subset-lcms-up-to odd? subsets limit)
+       (sum-of-subset-lcms-up-to even? subsets limit)
         )
     )
   )
