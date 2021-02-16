@@ -133,3 +133,16 @@
       (it (str "should match " (pr-str factors) " " limit)
         (should= (sum-multiples factors limit)
                  (fast-sum-multiples factors limit))))))
+
+(describe "Timing"
+  (it "should be faster."
+    (let [expected (time
+                     (sum-multiples
+                       [2 3 5 7 11]
+                       1000000))
+          actual (time
+                   (fast-sum-multiples
+                     [2 3 5 7 11]
+                     1000000))
+          ]
+      (should= expected actual))))
