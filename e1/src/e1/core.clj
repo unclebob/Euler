@@ -49,32 +49,23 @@
 
 (defn lcmv [& v] (reduce lcm v))
 
+(defn sum-of-subset-lcms-up-to [cardinality subsets limit]
+  (let [tuples (filter #(= cardinality (count %)) subsets)
+        lcms (map #(apply lcmv %) tuples)
+        sums (map #(sum-multiple-up-to % limit) lcms)]
+    (reduce + sums)))
+
 (defn fast-sum-multiples [factors limit]
   (let [facs (remove-multiples factors)
         mults (map
                 #(sum-multiple-up-to % limit)
                 facs)
         subsets (comb/subsets facs)
-        subsets (remove #(< (count %) 2) subsets)
-        pairs (filter #(= 2 (count %)) subsets)
-        triplets (filter #(= (count %) 3) subsets)
-        quads (filter #(= (count %) 4) subsets)
-        pair-factors (map #(apply lcmv %) pairs)
-        triplet-factors (map #(apply lcmv %) triplets)
-        quad-factors (map #(apply lcmv %) quads)
-        pair-sums (map #(sum-multiple-up-to % limit) pair-factors)
-        triplet-sums (map #(sum-multiple-up-to % limit) triplet-factors)
-        quad-sums (map #(sum-multiple-up-to % limit) quad-factors)
-
-        _ (prn "subsets: " subsets)
-        _ (prn "triplets: " triplets)
-        _ (prn "pair-sums: " pair-sums)
-        _ (prn "triplet-sums: " triplet-sums)
         ]
     (-> (reduce + mults)
-        (- (reduce + pair-sums))
-        (+ (reduce + triplet-sums))
-        (- (reduce + quad-sums))
+        (- (sum-of-subset-lcms-up-to 2 subsets limit))
+        (+ (sum-of-subset-lcms-up-to 3 subsets limit))
+        (- (sum-of-subset-lcms-up-to 4 subsets limit))
         )
     )
   )
