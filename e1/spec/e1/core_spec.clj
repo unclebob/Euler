@@ -2,6 +2,8 @@
   (:require [speclj.core :refer :all]
             [e1.core :refer :all]))
 
+(defn p2 [n] (+ 2 n))
+
 (describe "Sum of multiples of 3 and 5"
   (it "should be zero if limit less than 3"
     (should= 0 (sum-multiples-3-5 0))
@@ -93,6 +95,24 @@
                     (- actual expected))
           (should= expected actual))))
     )
+
+  (context "four factors"
+      (it "works for 2 3 5 7"
+        (should= (sum-multiples [2 3 5 7] 210)
+                 (fast-sum-multiples [2 3 5 7] 210)))
+
+      (for [_ (range 100)]
+        (let [limit 10000
+              factors [(p2 (rand-int 30))
+                       (p2 (rand-int 30))
+                       (p2 (rand-int 30))
+                       (inc (rand-int 30))]
+              expected (sum-multiples factors limit)
+              actual (fast-sum-multiples factors limit)]
+          (it (pr-str factors limit " should match: "
+                      (- actual expected))
+            (should= expected actual))))
+      )
   )
 
 ;(describe "Fast sum of multiples"
