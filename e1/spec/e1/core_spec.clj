@@ -58,8 +58,7 @@
 
   (it "should work for two multiples"
     (should= (sum-multiples [3 5] 100)
-             (fast-sum-multiples [3 5] 100)))
-  )
+             (fast-sum-multiples [3 5] 100))))
 
 (describe "Fast sum of multiples"
   (context "one factor"
@@ -93,8 +92,7 @@
             actual (fast-sum-multiples factors limit)]
         (it (pr-str factors limit " should match: "
                     (- actual expected))
-          (should= expected actual))))
-    )
+          (should= expected actual)))))
 
   (context "four factors"
       (it "works for 2 3 5 7"
@@ -111,18 +109,27 @@
               actual (fast-sum-multiples factors limit)]
           (it (pr-str factors limit " should match: "
                       (- actual expected))
-            (should= expected actual))))
-      )
-  )
+            (should= expected actual))))))
 
-;(describe "Fast sum of multiples"
-;  (for [n (range 100 )]
-;    (let [n-factors (inc (rand-int 5))
-;          factors (repeatedly
-;                    n-factors
-;                    #(inc (rand-int 20)))
-;          limit (rand-int 1000)]
-;      (it (str "should match " (pr-str factors) " " limit)
-;        (should= (sum-multiples factors limit)
-;                 (fast-sum-multiples factors limit))
-;        ))))
+(describe "General Fast sum of multiples"
+  (it "works for 2 3 5 7 11"
+    (let [factors [2 3 5 7 11]
+          limit (reduce * factors)]
+      (should= (sum-multiples factors limit)
+               (fast-sum-multiples factors limit))))
+
+  (it "works for 2 3 5 7 11"
+    (let [factors [2 3 5 7 11 13]
+          limit (reduce * factors)]
+      (should= (sum-multiples factors limit)
+               (fast-sum-multiples factors limit))))
+
+  (for [_ (range 100 )]
+    (let [n-factors (+ 2 (rand-int 6))
+          factors (repeatedly
+                    n-factors
+                    #(inc (rand-int 30)))
+          limit (rand-int 100000)]
+      (it (str "should match " (pr-str factors) " " limit)
+        (should= (sum-multiples factors limit)
+                 (fast-sum-multiples factors limit))))))

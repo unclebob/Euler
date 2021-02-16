@@ -9,11 +9,11 @@
 
 
 (defn sum-multiples [factors limit]
-  (let [multiples (set (mapcat
-                         #(range % (inc limit) %)
-                         factors))]
-    (reduce + multiples))
-  )
+  (let [multiples (set
+                    (mapcat
+                      #(range % (inc limit) %)
+                      factors))]
+    (reduce + multiples)))
 
 (defn sum-up-to [n]
   (/ (+ n (* n n)) 2))
@@ -49,7 +49,7 @@
 
 (defn lcmv [& v] (reduce lcm v))
 
-(defn sum-of-subset-lcms-up-to [f subsets limit]
+(defn sum-of-subsets-lcms-up-to [f subsets limit]
   (let [tuples (filter #(f (count %)) subsets)
         lcms (map #(apply lcmv %) tuples)
         sums (map #(sum-multiple-up-to % limit) lcms)]
@@ -58,8 +58,5 @@
 (defn fast-sum-multiples [factors limit]
   (let [facs (remove-multiples factors)
         subsets (filter #(pos? (count %)) (comb/subsets facs))]
-    (- (sum-of-subset-lcms-up-to odd? subsets limit)
-       (sum-of-subset-lcms-up-to even? subsets limit)
-        )
-    )
-  )
+    (- (sum-of-subsets-lcms-up-to odd? subsets limit)
+       (sum-of-subsets-lcms-up-to even? subsets limit))))
