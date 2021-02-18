@@ -7,13 +7,11 @@
         fives (range 5 (inc limit) 5)]
     (reduce + (set (concat threes fives)))))
 
-
 (defn sum-multiples [factors limit]
-  (let [multiples (set
-                    (mapcat
-                      #(range % (inc limit) %)
-                      factors))]
-    (reduce + multiples)))
+  (->> factors
+       (mapcat #(range % (inc limit) %))
+       set
+       (reduce +)))
 
 (defn sum-up-to [n]
   (/ (+ n (* n n)) 2))
