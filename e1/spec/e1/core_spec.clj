@@ -92,57 +92,60 @@
             actual (fast-sum-multiples factors limit)]
         (it (pr-str factors limit " should match: "
                     (- actual expected))
-          (should= expected actual)))))
+          (should= expected actual))))
+    )
 
   (context "four factors"
-      (it "works for 2 3 5 7"
-        (should= (sum-multiples [2 3 5 7] 210)
-                 (fast-sum-multiples [2 3 5 7] 210)))
+    ;(it "works for 2 3 5 7"
+    ;  (should= (sum-multiples [2 3 5 7] 210)
+    ;           (fast-sum-multiples [2 3 5 7] 210)))
+    ;
+    ;    (for [_ (range 100)]
+    ;      (let [limit 10000
+    ;            factors [(p2 (rand-int 30))
+    ;                     (p2 (rand-int 30))
+    ;                     (p2 (rand-int 30))
+    ;                     (inc (rand-int 30))]
+    ;            expected (sum-multiples factors limit)
+    ;            actual (fast-sum-multiples factors limit)]
+    ;        (it (pr-str factors limit " should match: "
+    ;                    (- actual expected))
+    ;          (should= expected actual)))))
+    )
+  )
 
-      (for [_ (range 100)]
-        (let [limit 10000
-              factors [(p2 (rand-int 30))
-                       (p2 (rand-int 30))
-                       (p2 (rand-int 30))
-                       (inc (rand-int 30))]
-              expected (sum-multiples factors limit)
-              actual (fast-sum-multiples factors limit)]
-          (it (pr-str factors limit " should match: "
-                      (- actual expected))
-            (should= expected actual))))))
+;(describe "General Fast sum of multiples"
+;  (it "works for 2 3 5 7 11"
+;    (let [factors [2 3 5 7 11]
+;          limit (reduce * factors)]
+;      (should= (sum-multiples factors limit)
+;               (fast-sum-multiples factors limit))))
+;
+;  (it "works for 2 3 5 7 11"
+;    (let [factors [2 3 5 7 11 13]
+;          limit (reduce * factors)]
+;      (should= (sum-multiples factors limit)
+;               (fast-sum-multiples factors limit))))
+;
+;  (for [_ (range 100 )]
+;    (let [n-factors (+ 2 (rand-int 6))
+;          factors (repeatedly
+;                    n-factors
+;                    #(inc (rand-int 30)))
+;          limit (rand-int 100000)]
+;      (it (str "should match " (pr-str factors) " " limit)
+;        (should= (sum-multiples factors limit)
+;                 (fast-sum-multiples factors limit))))))
 
-(describe "General Fast sum of multiples"
-  (it "works for 2 3 5 7 11"
-    (let [factors [2 3 5 7 11]
-          limit (reduce * factors)]
-      (should= (sum-multiples factors limit)
-               (fast-sum-multiples factors limit))))
-
-  (it "works for 2 3 5 7 11"
-    (let [factors [2 3 5 7 11 13]
-          limit (reduce * factors)]
-      (should= (sum-multiples factors limit)
-               (fast-sum-multiples factors limit))))
-
-  (for [_ (range 100 )]
-    (let [n-factors (+ 2 (rand-int 6))
-          factors (repeatedly
-                    n-factors
-                    #(inc (rand-int 30)))
-          limit (rand-int 100000)]
-      (it (str "should match " (pr-str factors) " " limit)
-        (should= (sum-multiples factors limit)
-                 (fast-sum-multiples factors limit))))))
-
-(describe "Timing"
-  (it "should be faster."
-    (let [expected (time
-                     (sum-multiples
-                       [2 3 5 7 11]
-                       1000000))
-          actual (time
-                   (fast-sum-multiples
-                     [2 3 5 7 11]
-                     1000000))
-          ]
-      (should= expected actual))))
+;(describe "Timing"
+;  (it "should be faster."
+;    (let [expected (time
+;                     (sum-multiples
+;                       [2 3 5 7 11]
+;                       1000000))
+;          actual (time
+;                   (fast-sum-multiples
+;                     [2 3 5 7 11]
+;                     1000000))
+;          ]
+;      (should= expected actual))))
