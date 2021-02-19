@@ -47,31 +47,15 @@
 
 (defn lcmv [& v] (reduce lcm v))
 
-(defn sum-of-subsets-lcms-up-to [f subsets limit]
-  (let [tuples (filter #(f (count %)) subsets)
-        lcms (map #(apply lcmv %) tuples)
-        sums (map #(sum-multiple-up-to % limit) lcms)]
-    (reduce + sums)))
-
-;(defn fast-sum-multiples [factors limit]
-;  (let [facs (remove-multiples factors)
-;        subsets (filter #(pos? (count %)) (comb/subsets facs))]
-;    (- (sum-of-subsets-lcms-up-to odd? subsets limit)
-;       (sum-of-subsets-lcms-up-to even? subsets limit))))
+(defn sum-of-multiples-of-lcm-of-tuples [condition subsets limit]
+  (->> subsets
+       (remove #(empty? %))
+       (filter #(condition (count %)))
+       (map #(sum-multiple-up-to (apply lcmv %) limit))
+       (reduce +)))
 
 (defn fast-sum-multiples [factors limit]
   (let [subsets (comb/subsets (remove-multiples factors))
-        singlets (filter #(= 1 (count %)) subsets)
-        pairs (filter #(= 2 (count %)) subsets)
-        triplets (filter #(= 3 (count %)) subsets)
-
-        singlet-sum (reduce +
-                            (map #(sum-multiple-up-to (first %) limit)
-                                 singlets))
-        pair-sum (reduce +
-                         (map #(sum-multiple-up-to (apply lcm %) limit)
-                              pairs))
-        triplets-sum (reduce +
-                             (map #(sum-multiple-up-to (apply lcmv %) limit)
-                                  triplets))]
-    (+ (- singlet-sum pair-sum) triplets-sum)))
+        odds (sum-of-multiples-of-lcm-of-tuples odd? subsets limit)
+        evens (sum-of-multiples-of-lcm-of-tuples even? subsets limit)]
+    (- odds evens)))
