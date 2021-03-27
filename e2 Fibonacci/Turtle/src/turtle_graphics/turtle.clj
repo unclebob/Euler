@@ -33,11 +33,19 @@
   (assoc turtle :velocity velocity)
   )
 
-(defn update [{:keys [position velocity heading] :as turtle}]
+(defn update-turtle [{:keys [position velocity heading] :as turtle}]
   (let [radians (q/radians heading)
         [x y] position
         vx (* velocity (Math/cos radians))
         vy (* velocity (Math/sin radians))
         position [(+ x vx) (+ y vy)]]
     (assoc turtle :position position))
+  )
+
+(defn handle-command [turtle [cmd & args :as command]]
+  (prn command)
+  (condp = cmd
+    :forward (assoc turtle :velocity 5)
+
+    :else turtle)
   )
