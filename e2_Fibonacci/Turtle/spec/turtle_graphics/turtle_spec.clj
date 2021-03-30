@@ -136,14 +136,19 @@
         (should= [1.0 1.0] pen-start)))
 
     (it "adds line when pen goes back up"
-      (let [turtle (-> @turtle (t/pen-down) (t/position [2.0 2.0]) (t/pen-up))
+      (let [turtle (-> @turtle
+                       (t/weight [3])
+                       (t/pen-down)
+                       (t/position [2.0 2.0])
+                       (t/pen-up))
             pen (:pen turtle)
             pen-start (:pen-start turtle)
             lines (:lines turtle)]
         (should= :up pen)
         (should-be-nil pen-start)
         (should= [{:line-start [1.0 1.0]
-                   :line-end [2.0 2.0]}] lines)))
+                   :line-end [2.0 2.0]
+                   :line-weight 3}] lines)))
 
     (it "does not add line when pen is already up"
       (let [turtle (-> @turtle (t/position [2.0 2.0]) (t/pen-up))
@@ -160,6 +165,7 @@
                      @turtle
                      (t/heading 0)
                      (t/pen-down)
+                     (t/weight [3])
                      (t/forward [1])
                      (t/update-turtle))
             pen (:pen turtle)
@@ -171,6 +177,7 @@
         (should= :idle state)
         (should= position pen-start)
         (should= [{:line-start [1.0 1.0]
-                   :line-end [2.0 1.0]}] lines)))
+                   :line-end [2.0 1.0]
+                   :line-weight 3}] lines)))
     )
   )

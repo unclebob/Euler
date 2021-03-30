@@ -7,8 +7,7 @@
 (defn fibs
   ([a b]
    (lazy-seq
-     (cons a (fibs b (+ a b))))
-            )
+     (cons a (fibs b (+ a b)))))
   ([] (fibs 1 1))
   )
 
@@ -20,9 +19,12 @@
           (pen-up [] (async/>!! channel [:pen-up]))
           (pen-down [] (async/>!! channel [:pen-down]))
           (hide [] (async/>!! channel [:hide]))
-          (show [] (async/>!! channel [:show]))]
+          (show [] (async/>!! channel [:show]))
+          (weight [weight] (async/>!! channel [:weight weight]))]
     (pen-down)
+    (weight 3)
     (doseq [f (take 20 (fibs))]
+      (weight (inc (Math/log (double f))))
       (forward f)
       (right 90))
     )

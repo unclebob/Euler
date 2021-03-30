@@ -9,6 +9,7 @@
 (s/def ::distance number?)
 (s/def ::omega number?)
 (s/def ::angle number?)
+(s/def ::weight (s/and pos? number?))
 (s/def ::state #{:idle :busy})
 (s/def ::pen #{:up :down})
 (s/def ::pen-start (s/or :nil nil?
@@ -25,6 +26,7 @@
                                  ::omega
                                  ::angle
                                  ::pen
+                                 ::weight
                                  ::lines
                                  ::visible
                                  ::state]
@@ -39,6 +41,7 @@
    :omega 0.0
    :angle 0.0
    :pen :up
+   :weight 1
    :visible true
    :lines []
    :state :idle})
@@ -49,13 +52,15 @@
 (defn draw [turtle]
   (when (= :down (:pen turtle))
     (q/stroke 0)
-    (q/stroke-weight 1)
+    (q/stroke-weight (:weight turtle))
     (q/line (:pen-start turtle) (:position turtle)))
 
   (doseq [line (:lines turtle)]
+    (q/stroke-weight (:line-weight line))
     (q/line (:line-start line) (:line-end line)))
 
   (when (:visible turtle)
+    (q/stroke-weight 1)
     (let [[x y] (:position turtle)
           heading (q/radians (:heading turtle))
           base-left (- (/ WIDTH 2))
@@ -114,11 +119,23 @@
                   :angle angle
                   :omega (if (zero? angle) 0.0 omega))))
 
+(defn make-line [{:keys [pen-start position weight]}]
+  {:line-start pen-start
+   :line-end position
+   :line-weight weight})
+
 (defn update-turtle [turtle]
   {:post [(s/assert ::turtle %)]}
   (if (= :idle (:state turtle))
     turtle
-    (let [{:keys [distance state angle lines position pen pen-start] :as turtle}
+    (let [{:keys [distance
+                  state
+                  angle
+                  lines
+                  position
+                  pen
+                  pen-start
+                  weight] :as turtle}
           (-> turtle
               (update-position)
               (update-heading))
@@ -126,8 +143,7 @@
                      (zero? angle))
           state (if done? :idle state)
           lines (if (and done? (= pen :down))
-                  (conj lines {:line-start pen-start
-                               :line-end position})
+                  (conj lines (make-line turtle))
                   lines)
           pen-start (if (and done? (= pen :down))
                       position
@@ -143,8 +159,7 @@
 (defn pen-up [{:keys [pen pen-start position lines] :as turtle}]
   (if (= :up pen)
     turtle
-    (let [new-line {:line-start pen-start
-                    :line-end position}
+    (let [new-line (make-line turtle)
           lines (conj lines new-line)]
       (assoc turtle :pen :up
                     :pen-start nil
@@ -168,6 +183,9 @@
 (defn show [turtle]
   (assoc turtle :visible true))
 
+(defn weight [turtle [weight]]
+  (assoc turtle :weight weight))
+
 (defn handle-command [turtle [cmd & args :as command]]
   (prn command)
   (condp = cmd
@@ -179,6 +197,7 @@
     :pen-up (pen-up turtle)
     :hide (hide turtle)
     :show (show turtle)
+    :weight (weight turtle args)
     :else turtle)
   )
 
