@@ -4,25 +4,42 @@
             [turtle-graphics.turtle :as turtle]
             [clojure.core.async :as async]))
 
+(defn fibs
+  ([a b]
+   (lazy-seq
+     (cons a (fibs b (+ a b))))
+            )
+  ([] (fibs 1 1))
+  )
+
+(defn turtle-script [channel]
+  (letfn [(forward [distance] (async/>!! channel [:forward distance]))
+          (back [distance] (async/>!! channel [:back distance]))
+          (right [angle] (async/>!! channel [:right angle]))
+          (left [angle] (async/>!! channel [:left angle]))
+          (pen-up [] (async/>!! channel [:pen-up]))
+          (pen-down [] (async/>!! channel [:pen-down]))
+          (hide [] (async/>!! channel [:hide]))
+          (show [] (async/>!! channel [:show]))]
+    (pen-down)
+    (doseq [f (take 20 (fibs))]
+      (forward f)
+      (right 90))
+    )
+  )
 
 (defn setup []
   (q/frame-rate 30)
   (q/color-mode :rgb)
   (let [channel (async/chan)
-        state {:turtle (-> (turtle/make) (turtle/heading 0) (turtle/velocity 0))
-               :channel channel
-               :tracks []}]
+        state {:turtle (turtle/make)
+               :channel channel}]
     (async/go
-      (doseq [x (range 2)]
-        (async/>! channel [:right 360]))
-      (async/>! channel [:pen-down])
-      (doseq [x (range 4)]
-        (async/>! channel [:forward 100])
-        (async/>! channel [:right 90]))
-      (prn "done sending commands."))
+      (turtle-script channel)
+      (prn "Turtle script complete"))
     state))
 
-(defn update-state [{:keys [turtle channel] :as state}]
+(defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)
         turtle (turtle/update-turtle turtle)
         command (if (= :idle (:state turtle)) (async/poll! channel) nil)

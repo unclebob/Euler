@@ -17,6 +17,7 @@
 (s/def ::line-end (s/tuple number? number?))
 (s/def ::line (s/keys :req-un [::line-start ::line-end]))
 (s/def ::lines (s/coll-of ::line))
+(s/def ::visible boolean?)
 (s/def ::turtle (s/keys :req-un [::position
                                  ::heading
                                  ::velocity
@@ -25,6 +26,7 @@
                                  ::angle
                                  ::pen
                                  ::lines
+                                 ::visible
                                  ::state]
                         :opt-un [::pen-start]))
 
@@ -37,6 +39,7 @@
    :omega 0.0
    :angle 0.0
    :pen :up
+   :visible true
    :lines []
    :state :idle})
 
@@ -52,21 +55,20 @@
   (doseq [line (:lines turtle)]
     (q/line (:line-start line) (:line-end line)))
 
-  (let [[x y] (:position turtle)
-        heading (q/radians (:heading turtle))
-        base-left (- (/ WIDTH 2))
-        base-right (/ WIDTH 2)
-        tip HEIGHT]
-    (q/stroke 0)
-    (q/with-translation
-      [x y]
-      (q/with-rotation
-        [heading]
-        (q/line 0 base-left 0 base-right)
-        (q/line 0 base-left tip 0)
-        (q/line 0 base-right tip 0)))
-    )
-  )
+  (when (:visible turtle)
+    (let [[x y] (:position turtle)
+          heading (q/radians (:heading turtle))
+          base-left (- (/ WIDTH 2))
+          base-right (/ WIDTH 2)
+          tip HEIGHT]
+      (q/stroke 0)
+      (q/with-translation
+        [x y]
+        (q/with-rotation
+          [heading]
+          (q/line 0 base-left 0 base-right)
+          (q/line 0 base-left tip 0)
+          (q/line 0 base-right tip 0))))))
 
 (defn heading [turtle heading]
   (assoc turtle :heading heading))
@@ -88,20 +90,6 @@
 
 (defn state [turtle state]
   (assoc turtle :state state))
-
-(defn pen-down [{:keys [pen position pen-start] :as turtle}]
-  (assoc turtle :pen :down
-                :pen-start (if (= :up pen) position pen-start)))
-
-(defn pen-up [{:keys [pen pen-start position lines] :as turtle}]
-  (if (= :up pen)
-    turtle
-    (let [new-line {:line-start pen-start
-                    :line-end position}
-          lines (conj lines new-line)]
-      (assoc turtle :pen :up
-                    :pen-start nil
-                    :lines lines))))
 
 (defn update-position [{:keys [position velocity heading distance] :as turtle}]
   (let [step (min (q/abs velocity) distance)
@@ -147,19 +135,50 @@
       (assoc turtle :state state :lines lines :pen-start pen-start)))
   )
 
+
+(defn pen-down [{:keys [pen position pen-start] :as turtle}]
+  (assoc turtle :pen :down
+                :pen-start (if (= :up pen) position pen-start)))
+
+(defn pen-up [{:keys [pen pen-start position lines] :as turtle}]
+  (if (= :up pen)
+    turtle
+    (let [new-line {:line-start pen-start
+                    :line-end position}
+          lines (conj lines new-line)]
+      (assoc turtle :pen :up
+                    :pen-start nil
+                    :lines lines))))
+
 (defn forward [turtle [distance]]
   (assoc turtle :velocity 5 :distance distance :state :busy))
 
+(defn back [turtle [distance]]
+  (assoc turtle :velocity -5 :distance distance :state :busy))
+
 (defn right [turtle [angle]]
   (assoc turtle :omega 10 :angle angle :state :busy))
+
+(defn left [turtle [angle]]
+  (assoc turtle :omega -10 :angle angle :state :busy))
+
+(defn hide [turtle]
+  (assoc turtle :visible false))
+
+(defn show [turtle]
+  (assoc turtle :visible true))
 
 (defn handle-command [turtle [cmd & args :as command]]
   (prn command)
   (condp = cmd
     :forward (forward turtle args)
+    :back (back turtle args)
     :right (right turtle args)
+    :left (left turtle args)
     :pen-down (pen-down turtle)
-
+    :pen-up (pen-up turtle)
+    :hide (hide turtle)
+    :show (show turtle)
     :else turtle)
   )
 
