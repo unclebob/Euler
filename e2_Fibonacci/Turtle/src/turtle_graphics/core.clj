@@ -20,26 +20,28 @@
           (pen-down [] (async/>!! channel [:pen-down]))
           (hide [] (async/>!! channel [:hide]))
           (show [] (async/>!! channel [:show]))
-          (weight [weight] (async/>!! channel [:weight weight]))]
+          (weight [weight] (async/>!! channel [:weight weight]))
+          (speed [speed] (async/>!! channel [:speed speed]))]
     (pen-down)
+    (speed 50)
     (weight 3)
     (doseq [f (take 20 (fibs))]
       (weight (inc (Math/log (double f))))
       (forward f)
       (right 90))
     )
-  )
 
-(defn setup []
-  (q/frame-rate 30)
-  (q/color-mode :rgb)
-  (let [channel (async/chan)
-        state {:turtle (turtle/make)
-               :channel channel}]
-    (async/go
-      (turtle-script channel)
-      (prn "Turtle script complete"))
-    state))
+
+  (defn setup []
+    (q/frame-rate 30)
+    (q/color-mode :rgb)
+    (let [channel (async/chan)
+          state {:turtle (turtle/make)
+                 :channel channel}]
+      (async/go
+        (turtle-script channel)
+        (prn "Turtle script complete"))
+      state)))
 
 (defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)

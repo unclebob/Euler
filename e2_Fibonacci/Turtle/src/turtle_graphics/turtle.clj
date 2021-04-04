@@ -19,6 +19,7 @@
 (s/def ::line (s/keys :req-un [::line-start ::line-end]))
 (s/def ::lines (s/coll-of ::line))
 (s/def ::visible boolean?)
+(s/def ::speed (s/and int? pos?))
 (s/def ::turtle (s/keys :req-un [::position
                                  ::heading
                                  ::velocity
@@ -27,6 +28,7 @@
                                  ::angle
                                  ::pen
                                  ::weight
+                                 ::speed
                                  ::lines
                                  ::visible
                                  ::state]
@@ -42,6 +44,7 @@
    :angle 0.0
    :pen :up
    :weight 1
+   :speed 5
    :visible true
    :lines []
    :state :idle})
@@ -166,16 +169,24 @@
                     :lines lines))))
 
 (defn forward [turtle [distance]]
-  (assoc turtle :velocity 5 :distance distance :state :busy))
+  (assoc turtle :velocity (:speed turtle)
+                :distance distance
+                :state :busy))
 
 (defn back [turtle [distance]]
-  (assoc turtle :velocity -5 :distance distance :state :busy))
+  (assoc turtle :velocity (- (:speed turtle))
+                :distance distance
+                :state :busy))
 
 (defn right [turtle [angle]]
-  (assoc turtle :omega 10 :angle angle :state :busy))
+  (assoc turtle :omega (* 2 (:speed turtle))
+                :angle angle
+                :state :busy))
 
 (defn left [turtle [angle]]
-  (assoc turtle :omega -10 :angle angle :state :busy))
+  (assoc turtle :omega (* -2 (:speed turtle))
+                :angle angle
+                :state :busy))
 
 (defn hide [turtle]
   (assoc turtle :visible false))
@@ -185,6 +196,9 @@
 
 (defn weight [turtle [weight]]
   (assoc turtle :weight weight))
+
+(defn speed [turtle [speed]]
+  (assoc turtle :speed speed))
 
 (defn handle-command [turtle [cmd & args :as command]]
   (prn command)
@@ -198,6 +212,7 @@
     :hide (hide turtle)
     :show (show turtle)
     :weight (weight turtle args)
+    :speed (speed turtle args)
     :else turtle)
   )
 
