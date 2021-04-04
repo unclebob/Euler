@@ -4,6 +4,8 @@
             [turtle-graphics.turtle :as turtle]
             [clojure.core.async :as async]))
 
+(def channel (async/chan))
+
 (defn fibs
   ([a b]
    (lazy-seq
@@ -11,38 +13,38 @@
   ([] (fibs 1 1))
   )
 
+(defn forward [distance] (async/>!! channel [:forward distance]))
+(defn back [distance] (async/>!! channel [:back distance]))
+(defn right [angle] (async/>!! channel [:right angle]))
+(defn left [angle] (async/>!! channel [:left angle]))
+(defn pen-up [] (async/>!! channel [:pen-up]))
+(defn pen-down [] (async/>!! channel [:pen-down]))
+(defn hide [] (async/>!! channel [:hide]))
+(defn show [] (async/>!! channel [:show]))
+(defn weight [weight] (async/>!! channel [:weight weight]))
+(defn speed [speed] (async/>!! channel [:speed speed]))
+
 (defn turtle-script [channel]
-  (letfn [(forward [distance] (async/>!! channel [:forward distance]))
-          (back [distance] (async/>!! channel [:back distance]))
-          (right [angle] (async/>!! channel [:right angle]))
-          (left [angle] (async/>!! channel [:left angle]))
-          (pen-up [] (async/>!! channel [:pen-up]))
-          (pen-down [] (async/>!! channel [:pen-down]))
-          (hide [] (async/>!! channel [:hide]))
-          (show [] (async/>!! channel [:show]))
-          (weight [weight] (async/>!! channel [:weight weight]))
-          (speed [speed] (async/>!! channel [:speed speed]))]
-    (pen-down)
-    (speed 50)
-    (weight 3)
-    (doseq [f (take 20 (fibs))]
-      (weight (inc (Math/log (double f))))
-      (forward f)
-      (right 90))
-    )
+  (pen-down)
+  (speed 50)
+  (weight 3)
+  (doseq [f (take 20 (fibs))]
+    (weight (inc (Math/log (double f))))
+    (forward f)
+    (right 90))
   )
 
 
 (defn setup []
   (q/frame-rate 30)
   (q/color-mode :rgb)
-  (let [channel (async/chan)
-        state {:turtle (turtle/make)
+  (let [state {:turtle (turtle/make)
                :channel channel}]
     (async/go
       (turtle-script channel)
       (prn "Turtle script complete"))
-    state))
+    state)
+  )
 
 (defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)
