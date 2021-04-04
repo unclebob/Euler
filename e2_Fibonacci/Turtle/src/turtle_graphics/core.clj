@@ -24,9 +24,9 @@
 (defn weight [weight] (async/>!! channel [:weight weight]))
 (defn speed [speed] (async/>!! channel [:speed speed]))
 
-(defn turtle-script [channel]
+(defn turtle-script []
   (pen-down)
-  (speed 50)
+  (speed 100)
   (weight 3)
   (doseq [f (take 20 (fibs))]
     (weight (inc (Math/log (double f))))
@@ -41,7 +41,7 @@
   (let [state {:turtle (turtle/make)
                :channel channel}]
     (async/go
-      (turtle-script channel)
+      (turtle-script)
       (prn "Turtle script complete"))
     state)
   )
