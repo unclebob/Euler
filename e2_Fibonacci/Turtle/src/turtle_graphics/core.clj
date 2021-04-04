@@ -30,18 +30,19 @@
       (forward f)
       (right 90))
     )
+  )
 
 
-  (defn setup []
-    (q/frame-rate 30)
-    (q/color-mode :rgb)
-    (let [channel (async/chan)
-          state {:turtle (turtle/make)
-                 :channel channel}]
-      (async/go
-        (turtle-script channel)
-        (prn "Turtle script complete"))
-      state)))
+(defn setup []
+  (q/frame-rate 30)
+  (q/color-mode :rgb)
+  (let [channel (async/chan)
+        state {:turtle (turtle/make)
+               :channel channel}]
+    (async/go
+      (turtle-script channel)
+      (prn "Turtle script complete"))
+    state))
 
 (defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)
