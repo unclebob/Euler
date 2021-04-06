@@ -24,14 +24,21 @@
 (defn weight [weight] (async/>!! channel [:weight weight]))
 (defn speed [speed] (async/>!! channel [:speed speed]))
 
-(defn turtle-script []
+(defn dot []
+  (weight 5)
   (pen-down)
-  (speed 100)
+  (forward 1)
+  (pen-up)
+  (back 1))
+
+(defn turtle-script []
+  (speed 1000)
   (weight 3)
   (doseq [f (take 20 (fibs))]
     (weight (inc (Math/log (double f))))
     (forward f)
-    (right 90))
+    (right 90)
+    (dot))
   )
 
 
@@ -46,13 +53,19 @@
     state)
   )
 
+(defn handle-commands [channel turtle]
+  (loop [turtle turtle]
+    (let [command (if (= :idle (:state turtle))
+                    (async/poll! channel)
+                    nil)]
+      (if (nil? command)
+        turtle
+        (recur (turtle/handle-command turtle command))))))
+
 (defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)
-        turtle (turtle/update-turtle turtle)
-        command (if (= :idle (:state turtle)) (async/poll! channel) nil)
-        turtle (if (some? command) (turtle/handle-command turtle command)
-                                   turtle)]
-    (assoc state :turtle turtle))
+        turtle (turtle/update-turtle turtle)]
+    (assoc state :turtle (handle-commands channel turtle)))
   )
 
 (defn draw-state [state]
