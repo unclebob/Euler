@@ -13,6 +13,8 @@
   ([] (fibs 1 1))
   )
 
+(def PHI (/ (+ 1 (Math/sqrt 5)) 2))
+
 (defn forward [distance] (async/>!! channel [:forward distance]))
 (defn back [distance] (async/>!! channel [:back distance]))
 (defn right [angle] (async/>!! channel [:right angle]))
@@ -31,7 +33,7 @@
   (pen-up)
   (back 1))
 
-(defn turtle-script []
+(defn fib-spiral []
   (speed 1000)
   (weight 3)
   (doseq [f (take 20 (fibs))]
@@ -40,6 +42,89 @@
     (right 90)
     (dot))
   )
+
+(defn rect [a b]
+  (doseq [_ (range 2)]
+    (forward a)
+    (right 90)
+    (forward b)
+    (right 90)))
+
+(defn scaled-rect [a b scale]
+  (let [width (* a scale)
+        height (* b scale)]
+    (rect width height)
+    (forward width)
+    (right 90))
+  )
+
+(defn phi-spiral []
+  (left 90)
+  (forward 100)
+  (right 90)
+  (pen-down)
+  (weight 2)
+  (speed 20)
+  (loop [a 1 b PHI]
+    (scaled-rect a b 10)
+    (if (> a 40)
+      nil
+      (recur b (* b PHI))
+      )
+    )
+  )
+
+(defn square-the-rect [length height]
+  (if (zero? height)
+    (println "Rational.")
+    (if (> 1 length)
+      (println "Irrational")
+      (let [n (quot length height)
+            r (rem length height)]
+        (println "Squares: " n)
+        (doseq [_ (range n)]
+          (forward height)
+          (right 90)
+          (pen-down)
+          (forward height)
+          (pen-up)
+          (back height)
+          (left 90))
+        (forward r)
+        (right 90)
+        (square-the-rect height r)))))
+
+(defn square-spiral [a b]
+  (let [length (max a b)
+        height (min a b)
+        f (quot 1000 length)
+        length (* length f)
+        height (* height f)
+        _ (prn length height)]
+    (speed 20)
+    (pen-up)
+    (back (quot length 2))
+    (left 90)
+    (forward (quot height 2))
+    (right 90)
+    (pen-down)
+    (weight 2)
+    (rect length height)
+    (pen-up)
+    (square-the-rect length height)))
+
+(defn flower-spiral [theta]
+  (let [petals 100
+        radius-increment 5]
+    (speed 300)
+    (doseq [x (range petals)]
+      (right theta)
+      (forward (* radius-increment x))
+      (dot)
+      (back (* radius-increment x)))))
+
+(defn turtle-script []
+  (flower-spiral (/ 360 PHI)))
 
 
 (defn setup []
@@ -75,6 +160,8 @@
     (let [{:keys [turtle]} state]
       (turtle/draw turtle)))
   )
+
+(declare turtle-graphics)
 
 (defn ^:export -main [& args]
   (q/defsketch turtle-graphics

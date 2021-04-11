@@ -137,8 +137,7 @@
                   lines
                   position
                   pen
-                  pen-start
-                  weight] :as turtle}
+                  pen-start] :as turtle}
           (-> turtle
               (update-position)
               (update-heading))
@@ -159,7 +158,7 @@
   (assoc turtle :pen :down
                 :pen-start (if (= :up pen) position pen-start)))
 
-(defn pen-up [{:keys [pen pen-start position lines] :as turtle}]
+(defn pen-up [{:keys [pen lines] :as turtle}]
   (if (= :up pen)
     turtle
     (let [new-line (make-line turtle)
@@ -200,8 +199,7 @@
 (defn speed [turtle [speed]]
   (assoc turtle :speed speed))
 
-(defn handle-command [turtle [cmd & args :as command]]
-  (prn command)
+(defn handle-command [turtle [cmd & args]]
   (condp = cmd
     :forward (forward turtle args)
     :back (back turtle args)
