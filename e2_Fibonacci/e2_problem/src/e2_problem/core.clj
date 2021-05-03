@@ -5,7 +5,7 @@
   ([a b]
    (lazy-seq
      (cons a (fibs b (+ a b)))))
-  ([] (fibs 1 1))
+  ([] (fibs 1N 1N))
   )
 
 
@@ -18,3 +18,5 @@
                (if (even? fib)
                  (+ sum fib)
                  sum))))))
+
+
