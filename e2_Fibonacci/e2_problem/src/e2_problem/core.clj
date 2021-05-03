@@ -1,19 +1,18 @@
 (ns e2-problem.core
   (:require [clojure.tools.namespace.repl :refer [refresh]]))
 
-(defn fib
-  ([n]
-   (if (< n 2)
-     1
-     (fib (dec n) 1 1)))
-  ([n a b]
+(defn fibs
+  ([a b n fs]
    (if (zero? n)
-     b
-     (recur (dec n) b (+ a b)))))
+     fs
+     (fibs b (+ a b) (dec n) (conj fs b))))
+   ([n] (fibs 0 1 n [])))
+
 
 (defn sum-even-fibs-upto [n]
-  (loop [i 0 fibs []]
-    (let [fib-i (fib i)]
-      (if (> fib-i n)
-        (reduce + (filter even? fibs))
-        (recur (inc i) (conj fibs fib-i))))))
+  (let [fs (fibs 90)]
+    (loop [i 0 fibs []]
+      (let [fib-i (nth fs i)]
+        (if (> fib-i n)
+          (reduce + (filter even? fibs))
+          (recur (inc i) (conj fibs fib-i)))))))
