@@ -8,7 +8,6 @@
   ([] (fibs 1N 1N))
   )
 
-
 (defn sum-even-fibs-upto [n]
   (loop [fs (fibs) sum 0]
     (let [fib (first fs)]
@@ -19,4 +18,9 @@
                  (+ sum fib)
                  sum))))))
 
+(defn ratio [n]
+  (let [fs (fibs)
+        numerator (nth fs (inc n))
+        denominator (nth fs n)]
+    (double (/ numerator denominator))))
 
