@@ -10,9 +10,11 @@
 
 
 (defn sum-even-fibs-upto [n]
-  (let [fs (fibs)]
-    (loop [i 0 fibs []]
-      (let [fib-i (nth fs i)]
-        (if (> fib-i n)
-          (reduce + (filter even? fibs))
-          (recur (inc i) (conj fibs fib-i)))))))
+  (loop [fs (fibs) sum 0]
+    (let [fib (first fs)]
+      (if (> fib n)
+        sum
+        (recur (rest fs)
+               (if (even? fib)
+                 (+ sum fib)
+                 sum))))))
