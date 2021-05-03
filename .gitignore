@@ -13,6 +13,8 @@
 **/.idea
 **/.DS_Store
 .DS_Store
-
-
+*.zip
+.nrepl-port
+.idea
+*.iml
 

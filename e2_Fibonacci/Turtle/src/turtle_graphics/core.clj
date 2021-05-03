@@ -2,7 +2,8 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]
             [turtle-graphics.turtle :as turtle]
-            [clojure.core.async :as async]))
+            [clojure.core.async :as async]
+            [clojure.tools.namespace.repl :refer [refresh]]))
 
 (def channel (async/chan))
 
@@ -114,21 +115,40 @@
     (square-the-rect length height)))
 
 (defn flower-spiral [theta]
-  (let [petals 100
-        radius-increment 5]
-    (speed 300)
+  (let [petals 250
+        radius-increment 2]
+    (speed 1000)
     (doseq [x (range petals)]
       (right theta)
       (forward (* radius-increment x))
       (dot)
-      (back (* radius-increment x)))))
+      (back (* radius-increment x)))
+    (hide)))
+
+(defn polygon [theta, l, n]
+  (pen-down)
+  (speed 1000)
+  (doseq [_ (range n)]
+    (forward l)
+    (right theta)))
+
+(defn spiral [theta length-f n]
+  (pen-down)
+  (speed 1000)
+  (loop [i 0 len 1]
+    (if (= i n)
+      nil
+      (do
+        (forward len)
+        (right theta)
+        (recur (inc i) (length-f len))))))
 
 (defn turtle-script []
-  (flower-spiral (/ 360 PHI)))
+  (spiral 5 #(* 1.005 %) 500))
 
 
 (defn setup []
-  (q/frame-rate 30)
+  (q/frame-rate 60)
   (q/color-mode :rgb)
   (let [state {:turtle (turtle/make)
                :channel channel}]
