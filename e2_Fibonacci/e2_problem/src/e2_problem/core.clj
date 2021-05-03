@@ -2,15 +2,15 @@
   (:require [clojure.tools.namespace.repl :refer [refresh]]))
 
 (defn fibs
-  ([a b n fs]
-   (if (zero? n)
-     fs
-     (fibs b (+ a b) (dec n) (conj fs b))))
-   ([n] (fibs 0 1 n [])))
+  ([a b]
+   (lazy-seq
+     (cons a (fibs b (+ a b)))))
+  ([] (fibs 1 1))
+  )
 
 
 (defn sum-even-fibs-upto [n]
-  (let [fs (fibs 90)]
+  (let [fs (fibs)]
     (loop [i 0 fibs []]
       (let [fib-i (nth fs i)]
         (if (> fib-i n)
