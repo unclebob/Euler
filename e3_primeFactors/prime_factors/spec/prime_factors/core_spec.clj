@@ -29,9 +29,9 @@
       (should= [2 2 3 3 5 7 11 11 13]
                (factors-of (* 2 2 3 3 5 7 11 11 13))))
   (it "factors Euler 3"
-      (should= [] (factors-of 600851475143)))
+      (should= [71 839 1471 6857] (factors-of 600851475143)))
 
   (it "factors mersenne 2^31-1"
-      (should= [] (factors-of (dec (power2 31)))))
+      (should= [2147483647] (factors-of (dec (power2 31)))))
 
       )
