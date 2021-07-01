@@ -10,5 +10,7 @@
       (should= [2] (factors-of 2)))
   (it "factors 3 -> [3]"
       (should= [3] (factors-of 3)))
+  (it "factors 4 -> [2 2]"
+      (should= [2 2] (factors-of 4)))
 
   )
