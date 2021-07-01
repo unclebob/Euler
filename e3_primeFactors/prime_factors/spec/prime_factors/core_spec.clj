@@ -3,7 +3,7 @@
             [prime-factors.core :refer :all]))
 
 (defn power2 [n]
-  (apply * (repeat n 2)))
+  (apply * (repeat n 2N)))
 
 (describe
   "factor primes"
