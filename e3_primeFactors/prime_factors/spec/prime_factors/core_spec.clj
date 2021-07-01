@@ -2,6 +2,9 @@
   (:require [speclj.core :refer :all]
             [prime-factors.core :refer :all]))
 
+(defn power2 [n]
+  (apply * (repeat n 2)))
+
 (describe
   "factor primes"
   (it "factors 1 -> []"
@@ -29,6 +32,6 @@
       (should= [] (factors-of 600851475143)))
 
   (it "factors mersenne 2^31-1"
-      (should= [] (factors-of 2147483647)))
+      (should= [] (factors-of (dec (power2 31)))))
 
       )
