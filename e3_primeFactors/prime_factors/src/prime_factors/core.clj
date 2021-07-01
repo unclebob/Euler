@@ -1,6 +1,7 @@
 (ns prime-factors.core)
 
 (defn factors-of [n]
+  (prn "factoring " n)
   (loop [factors [] n n divisor 2]
     (if (> n 1)
       (if (= 0 (mod n divisor))
