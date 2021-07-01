@@ -2,6 +2,6 @@
   (:require [speclj.core :refer :all]
             [prime-factors.core :refer :all]))
 
-(describe "a test"
-  (it "FIXME, I fail."
-    (should= 0 1)))
+(describe "factor primes"
+  (it "factors 1"
+    (should= [] (factors-of 1))))

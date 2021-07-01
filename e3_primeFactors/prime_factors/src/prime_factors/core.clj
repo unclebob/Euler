@@ -1,5 +1,4 @@
 (ns prime-factors.core)
 
-(defn -main
-  [& args]
-  (println "Hello World"))
+(defn factors-of [n]
+  [])
