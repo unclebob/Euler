@@ -25,5 +25,7 @@
   (it "factors lots"
       (should= [2 2 3 3 5 7 11 11 13]
                (factors-of (* 2 2 3 3 5 7 11 11 13))))
+  (it "factors Euler 3"
+      (should= [] (factors-of 600851475143)))
 
       )
