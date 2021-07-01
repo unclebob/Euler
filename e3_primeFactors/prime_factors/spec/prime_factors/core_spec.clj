@@ -28,4 +28,7 @@
   (it "factors Euler 3"
       (should= [] (factors-of 600851475143)))
 
+  (it "factors mersenne 2^31-1"
+      (should= [] (factors-of (dec (Math/pow 2 31)))))
+
       )
