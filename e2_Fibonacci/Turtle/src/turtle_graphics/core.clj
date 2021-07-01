@@ -51,6 +51,11 @@
     (forward b)
     (right 90)))
 
+(defn phi-rect [n]
+  (pen-down)
+  (weight 3)
+  (rect n (* n PHI)))
+
 (defn scaled-rect [a b scale]
   (let [width (* a scale)
         height (* b scale)]
@@ -98,7 +103,7 @@
 (defn square-spiral [a b]
   (let [length (max a b)
         height (min a b)
-        f (quot 1000 length)
+        f (quot 980 length)
         length (* length f)
         height (* height f)
         _ (prn length height)]
@@ -144,7 +149,11 @@
         (recur (inc i) (length-f len))))))
 
 (defn turtle-script []
-  (spiral 5 #(* 1.005 %) 500))
+  (speed 1)
+  (pen-down)
+  (doseq [x (range 4)]
+    (right 90)
+    (forward 100)))
 
 
 (defn setup []
