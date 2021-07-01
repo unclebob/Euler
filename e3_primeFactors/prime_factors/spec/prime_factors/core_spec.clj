@@ -8,5 +8,7 @@
       (should= [] (factors-of 1)))
   (it "factors 2 -> [2]"
       (should= [2] (factors-of 2)))
+  (it "factors 3 -> [3]"
+      (should= [3] (factors-of 3)))
 
   )
