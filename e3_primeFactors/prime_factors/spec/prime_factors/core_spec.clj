@@ -20,5 +20,7 @@
       (should= [7] (factors-of 7)))
   (it "factors 8 -> [2 2 2]"
       (should= [2 2 2] (factors-of 8)))
+  (it "factors 9 -> [3 3]"
+      (should= [3 3] (factors-of 9)))
 
   )
