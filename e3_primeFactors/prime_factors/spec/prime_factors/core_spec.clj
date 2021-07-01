@@ -37,4 +37,9 @@
   (it "factors mersenne 2^61-1"
       (let [m61 (dec (power2 61))]
         (should= [m61] (factors-of m61))))
+
+  (it "factors m31*m61"
+      (let [m61 (dec (power2 61))
+            m31 (dec (power2 31))]
+        (should= [m31 m61] (factors-of (* m31 m61)))))
       )
