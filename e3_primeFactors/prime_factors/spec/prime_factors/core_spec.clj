@@ -49,4 +49,14 @@
     (should= [2] (get-primes-up-to 2)))
   (it "3 -> [2 3]"
     (should= [2 3] (get-primes-up-to 3)))
+  (it "4 -> [2 3]"
+    (should= [2 3] (get-primes-up-to 4)))
+  (it "5 -> [2 3 5]"
+    (should= [2 3 5] (get-primes-up-to 5)))
+  (it "30 -> [2 3 5 7 11 13 17 19 23 29]"
+    (should= [2 3 5 7 11 13 17 19 23 29] (get-primes-up-to 30)))
+  (it "168 primes below 1000"
+      (should= 168 (count (get-primes-up-to 1000))))
+  (it "78498 primes below 1000000"
+        (should= 78498 (count (get-primes-up-to 1000000))))
   )
