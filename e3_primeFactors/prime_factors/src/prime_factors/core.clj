@@ -16,8 +16,6 @@
         (recur factors n (inc divisor)))
       factors)))
 
-
-
 (defn mark-multiples [composites prime n]
   (loop [i (* 2 prime)]
     (when (<= i n)
