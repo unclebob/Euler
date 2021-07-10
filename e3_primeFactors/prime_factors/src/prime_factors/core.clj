@@ -19,8 +19,10 @@
 
 
 (defn mark-multiples [composites prime n]
-  (let [multiples (range (* 2 prime) (inc n) prime)]
-    (doseq [i multiples] (aset composites i true)))
+  (loop [i (* 2 prime)]
+    (when (<= i n)
+      (aset composites i true)
+      (recur (+ i prime))))
   )
 
 (defn filter-primes [composites n]
