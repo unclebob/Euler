@@ -16,22 +16,30 @@
         (recur factors n (inc divisor)))
       factors)))
 
-(defn remove-factors-of-first [candidates]
-  (let [first-candidate (first candidates)
-        factors (i/int-set (range first-candidate
-                            (inc (last candidates))
-                            first-candidate))
-        new-candidates (set/difference candidates factors)]
-    new-candidates))
+
+
+(defn mark-multiples [composites prime n]
+  (let [multiples (range (* 2 prime) (inc n) prime)]
+    (doseq [i multiples] (aset composites i true)))
+  )
+
+(defn filter-primes [composites n]
+  (loop [primes [] i 2]
+    (if (> i n)
+      primes
+      (if (aget composites i)
+        (recur primes (inc i))
+        (recur (conj primes i) (inc i))))))
 
 (defn sieve [n]
-  (loop [candidates (i/int-set (range 2 (inc n)))
-         primes []]
-    (if (empty? candidates)
-      primes
-      (recur (remove-factors-of-first candidates)
-             (conj primes (first candidates))))
-    ))
+  (let [composites (make-array Boolean/TYPE (inc n))]
+    (loop [candidate 2]
+      (if (> candidate n)
+        (filter-primes composites n)
+        (if (aget composites candidate)
+          (recur (inc candidate))
+          (do (mark-multiples composites candidate n)
+              (recur (inc candidate))))))))
 
 (defn get-primes-up-to [n]
   (if (> n 1)
