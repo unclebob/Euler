@@ -13,3 +13,6 @@
         :else
         (recur factors n (inc divisor)))
       factors)))
+
+(defn get-primes-up-to [n]
+  [])
