@@ -43,5 +43,8 @@
   )
 
 (describe "get primes up to"
-  (it "finds no primes up to 1"
-    (should= [] (get-primes-up-to 1))))
+  (it "1 -> []]"
+    (should= [] (get-primes-up-to 1)))
+  (it "2 -> [2]"
+    (should= [2] (get-primes-up-to 2)))
+  )

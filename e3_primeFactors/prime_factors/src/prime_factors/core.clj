@@ -15,4 +15,6 @@
       factors)))
 
 (defn get-primes-up-to [n]
-  [])
+  (if (> n 1)
+    [2]
+    []))
