@@ -32,13 +32,15 @@
         (recur (conj primes i) (inc i))))))
 
 (defn sieve [n]
-  (let [composites (make-array Boolean/TYPE (inc n))]
+  (let [composites (make-array Boolean/TYPE (inc n))
+        limit (int (Math/sqrt n))]
     (loop [candidate 2]
       (if (> candidate n)
         (filter-primes composites n)
         (if (aget composites candidate)
           (recur (inc candidate))
-          (do (mark-multiples composites candidate n)
+          (do (when (<= candidate limit)
+                (mark-multiples composites candidate n))
               (recur (inc candidate))))))))
 
 (defn get-primes-up-to [n]
