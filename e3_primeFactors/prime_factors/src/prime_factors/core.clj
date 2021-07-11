@@ -1,6 +1,7 @@
 (ns prime-factors.core
   (:require [clojure.set :as set]
-            [clojure.data.int-map :as i]))
+            [clojure.data.int-map :as i])
+  (:import (sieve SieveTest)))
 
 (defn factors-of [n]
   (loop [factors [] n n divisor 2]
@@ -47,3 +48,6 @@
   (if (> n 1)
     (sieve n)
     []))
+
+(defn fast-primes-up-to [n]
+  (sieve.Sieve/primesUpTo n))

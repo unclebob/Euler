@@ -8,4 +8,5 @@
                  [org.clojure/data.int-map "1.0.0"]]
   :profiles {:dev {:dependencies [[speclj "3.3.2"]]}}
   :plugins [[speclj "3.3.2"]]
-  :test-paths ["spec"])
+  :test-paths ["spec"]
+  :java-source-paths ["../sieve/src"])

@@ -58,5 +58,5 @@
   (it "168 primes below 1000"
       (should= 168 (count (get-primes-up-to 1000))))
   (it "78498 primes below 1000000"
-        (should= 78498 (count (get-primes-up-to 1000000))))
+        (should= 78498 (count (fast-primes-up-to 1000000))))
   )
