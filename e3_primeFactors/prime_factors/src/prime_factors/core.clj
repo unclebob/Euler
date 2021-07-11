@@ -50,4 +50,13 @@
     []))
 
 (defn fast-primes-up-to [n]
-  (sieve.Sieve/primesUpTo n))
+  (seq (sieve.Sieve/primesUpTo n)))
+
+(defn find-twins [ns]
+  (loop [twins [] ns ns]
+    (if (< (count ns) 2)
+      twins
+      (let [diff (- (second ns) (first ns))]
+        (if (= 2 diff)
+          (recur (conj twins (first ns)) (rest ns))
+          (recur twins (rest ns)))))))

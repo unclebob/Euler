@@ -60,3 +60,26 @@
   (it "78498 primes below 1000000"
         (should= 78498 (count (fast-primes-up-to 1000000))))
   )
+
+(describe "find twin primes"
+  (it "[] -> []"
+    (should= [] (find-twins [])))
+  (it "[1] -> []"
+    (should= [] (find-twins [1])))
+  (it "[1 1] -> []"
+    (should= [] (find-twins [1 1])))
+  (it "[1 2] -> []"
+      (should= [] (find-twins [1 2])))
+  (it "[1 3] -> [1]"
+      (should= [1] (find-twins [1 3])))
+  (it "[1 3 4 7 9] -> [1 7]"
+        (should= [1 7] (find-twins [1 3 4 7 9])))
+  (it "should find twin primes up to 100"
+    (should= [3 5 11 17 29 41 59 71] (find-twins (fast-primes-up-to 100))))
+  (it "should find twin primes up to 1000"
+      (should-not (empty? (find-twins (fast-primes-up-to 1000)))))
+  (it "should find twin primes up to 10000"
+        (should-not (empty? (find-twins (fast-primes-up-to 10000)))))
+  (it "should find twin primes up to 100000"
+        (should-not (empty? (find-twins (fast-primes-up-to 100000)))))
+  )
