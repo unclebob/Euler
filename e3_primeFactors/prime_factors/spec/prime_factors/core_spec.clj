@@ -82,4 +82,8 @@
         (should-not (empty? (find-twins (fast-primes-up-to 10000)))))
   (it "should find twin primes up to 100000"
         (should-not (empty? (find-twins (fast-primes-up-to 100000)))))
+  (it "should find twin primes up to 1,000,000"
+        (should-not (empty? (find-twins (fast-primes-up-to 1000000)))))
+  (it "should find twin primes up to 10,000,000"
+          (should-not (empty? (find-twins (fast-primes-up-to 10000000)))))
   )

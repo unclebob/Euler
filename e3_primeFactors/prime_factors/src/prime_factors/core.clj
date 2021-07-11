@@ -50,7 +50,7 @@
     []))
 
 (defn fast-primes-up-to [n]
-  (seq (sieve.Sieve/primesUpTo n)))
+  (vec (sieve.Sieve/primesUpTo n)))
 
 (defn find-twins [ns]
   (loop [twins [] ns ns]
