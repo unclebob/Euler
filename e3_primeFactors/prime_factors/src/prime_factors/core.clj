@@ -61,10 +61,15 @@
           (recur (conj twins (first ns)) (rest ns))
           (recur twins (rest ns)))))))
 
+(defn find-longest-gap [twins]
+  (let [gaps (map #(- %1 %2) (rest twins) twins)]
+    (apply max gaps)))
+
 (defn twin-density [n]
   (let [primes (fast-primes-up-to n)
         nprimes (count primes)
         twins (find-twins primes)
+        gap (find-longest-gap twins)
         ntwins (count twins)
         prime-density (double (/ nprimes n))
         twin-density (double (/ ntwins n))
@@ -73,4 +78,5 @@
     (printf "prime-density:   %.4f\n" prime-density)
     (printf "twin-density:    %.4f\n" twin-density)
     (printf "twin-prevalence: %.4f\n" twin-prevalence)
+    (printf "longest twin gap: %d\n" gap)
     ))
