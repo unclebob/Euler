@@ -60,3 +60,17 @@
         (if (= 2 diff)
           (recur (conj twins (first ns)) (rest ns))
           (recur twins (rest ns)))))))
+
+(defn twin-density [n]
+  (let [primes (fast-primes-up-to n)
+        nprimes (count primes)
+        twins (find-twins primes)
+        ntwins (count twins)
+        prime-density (double (/ nprimes n))
+        twin-density (double (/ ntwins n))
+        twin-prevalence (double (/ ntwins nprimes))]
+    (printf "primes: %d, twins %d\n" nprimes ntwins)
+    (printf "prime-density:   %.4f\n" prime-density)
+    (printf "twin-density:    %.4f\n" twin-density)
+    (printf "twin-prevalence: %.4f\n" twin-prevalence)
+    ))
