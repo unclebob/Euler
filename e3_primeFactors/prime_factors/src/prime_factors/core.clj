@@ -1,7 +1,5 @@
 (ns prime-factors.core
-  (:require [clojure.set :as set]
-            [clojure.data.int-map :as i])
-  (:import (sieve SieveTest)))
+  (:import (sieve Sieve)))
 
 (defn factors-of [n]
   (loop [factors [] n n divisor 2]
@@ -50,7 +48,7 @@
     []))
 
 (defn fast-primes-up-to [n]
-  (vec (sieve.Sieve/primesUpTo n)))
+  (vec (Sieve/primesUpTo n)))
 
 (defn find-twins [ns]
   (loop [twins [] ns ns]
@@ -61,15 +59,13 @@
           (recur (conj twins (first ns)) (rest ns))
           (recur twins (rest ns)))))))
 
-(defn find-longest-gap [twins]
-  (let [gaps (map #(- %1 %2) (rest twins) twins)]
-    (apply max gaps)))
-
 (defn twin-density [n]
   (let [primes (fast-primes-up-to n)
+        gaps (map #(- %1 %2) (rest primes) primes)
         nprimes (count primes)
         twins (find-twins primes)
-        gap (find-longest-gap twins)
+        twin-gaps (map #(- %1 %2) (rest twins) twins)
+        longest-gap (apply max twin-gaps)
         ntwins (count twins)
         prime-density (double (/ nprimes n))
         twin-density (double (/ ntwins n))
@@ -78,5 +74,5 @@
     (printf "prime-density:   %.4f\n" prime-density)
     (printf "twin-density:    %.4f\n" twin-density)
     (printf "twin-prevalence: %.4f\n" twin-prevalence)
-    (printf "longest twin gap: %d\n" gap)
+    (printf "longest twin gap: %d\n" longest-gap)
     ))
