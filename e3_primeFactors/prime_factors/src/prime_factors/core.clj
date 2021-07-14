@@ -59,6 +59,19 @@
           (recur (conj twins (first ns)) (rest ns))
           (recur twins (rest ns)))))))
 
+(defn print-gap-frequency-graph [gap-frequencies]
+  (let [gaps (keys gap-frequencies)
+        max-gap (apply max gaps)
+        log-freqs (into {} (map #(vector (first %) (Math/log (second %))) gap-frequencies))
+        max-log-freq (apply max (vals log-freqs))
+        magnification (/ 90 max-log-freq)
+        gap-range (range 2 max-gap 2)]
+    (doseq [gap gap-range]
+      (printf "%5d: %8d %s\n"
+              gap
+              (get gap-frequencies gap 0)
+              (apply str (repeat (* magnification (get log-freqs gap 0)) "*"))))))
+
 (defn twin-density [n]
   (let [primes (fast-primes-up-to n)
         gaps (map #(- %1 %2) (rest primes) primes)
@@ -79,5 +92,5 @@
     (printf "longest twin gap: %d\n" longest-twin-gap)
     (printf "longest gap:      %d\n" (apply max gaps))
     (printf "mean gap:         %.4f\n" mean-gap)
-    (prn "gap frequencies: " (sort gap-frequencies))
+    (print-gap-frequency-graph gap-frequencies)
     ))
