@@ -72,6 +72,21 @@
               (get gap-frequencies gap 0)
               (apply str (repeat (* magnification (get log-freqs gap 0)) "*"))))))
 
+(defn get-last-digit-frequencies [ns modulus]
+  (let [last-digits (map #(mod % modulus) ns)
+        last-digit-frequencies (frequencies last-digits)]
+    last-digit-frequencies))
+
+(defn print-last-digit-frequencies [ns modulus]
+  (let [last-digits (get-last-digit-frequencies ns modulus)
+        freqs (remove #(< % 2) (vals last-digits))
+        min-freq (apply min freqs)
+        max-freq (apply max freqs)
+        mean-freq (/ (reduce + freqs) (double (count freqs)))]
+    (printf "min: %d, max: %d, mean: %.2f\n" min-freq max-freq mean-freq)
+    (prn last-digits)))
+
+
 (defn twin-density [n]
   (let [primes (fast-primes-up-to n)
         gaps (map #(- %1 %2) (rest primes) primes)
@@ -93,4 +108,5 @@
     (printf "longest gap:      %d\n" (apply max gaps))
     (printf "mean gap:         %.4f\n" mean-gap)
     (print-gap-frequency-graph gap-frequencies)
+    (printf "\nLast digit frequencies:")
     ))
