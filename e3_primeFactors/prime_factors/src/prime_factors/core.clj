@@ -77,6 +77,19 @@
         last-digit-frequencies (frequencies last-digits)]
     last-digit-frequencies))
 
+(defn print-graph [data-map]
+  (let [vs (vals data-map)
+        max-val (apply max vs)
+        magnification (/ 90 max-val)
+        categories (sort (keys data-map))]
+    (doseq [x categories]
+      (printf "%5s %5d: %s\n"
+              x
+              (get data-map x)
+              (apply str (repeat (* magnification (get data-map x)) "*"))))
+    )
+  )
+
 (defn print-last-digit-frequencies [ns modulus]
   (let [last-digits (get-last-digit-frequencies ns modulus)
         freqs (remove #(< % 2) (vals last-digits))
@@ -84,14 +97,14 @@
         max-freq (apply max freqs)
         mean-freq (/ (reduce + freqs) (double (count freqs)))]
     (printf "min: %d, max: %d, mean: %.2f\n" min-freq max-freq mean-freq)
-    (prn last-digits)))
+    (print-graph last-digits)))
 
-(defn get-consecutive-last-digit-frequencies [ns]
+(defn print-consecutive-last-digit-frequencies [ns]
   (let [first (map #(mod % 10) ns)
         second (rest first)
         consecutives (map #(str %1 "-" %2) first second)
         consecutive-frequencies (frequencies consecutives)]
-    consecutive-frequencies)
+    (print-graph consecutive-frequencies))
   )
 
 
