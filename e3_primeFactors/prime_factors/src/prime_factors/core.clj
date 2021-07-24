@@ -86,6 +86,14 @@
     (printf "min: %d, max: %d, mean: %.2f\n" min-freq max-freq mean-freq)
     (prn last-digits)))
 
+(defn get-consecutive-last-digit-frequencies [ns]
+  (let [first (map #(mod % 10) ns)
+        second (rest first)
+        consecutives (map #(str %1 "-" %2) first second)
+        consecutive-frequencies (frequencies consecutives)]
+    consecutive-frequencies)
+  )
+
 
 (defn twin-density [n]
   (let [primes (fast-primes-up-to n)
