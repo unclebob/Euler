@@ -131,3 +131,5 @@
     (print-gap-frequency-graph gap-frequencies)
     (printf "\nLast digit frequencies:")
     ))
+
+;https://github.com/unclebob/Euler/tree/main/e3_primeFactors
