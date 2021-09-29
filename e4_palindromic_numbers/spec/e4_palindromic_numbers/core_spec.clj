@@ -19,9 +19,9 @@
     (should= [[1 20] [2 10] [4 5]] (factor-pairs 20)))
 
   (it "can identify three digit pairs"
-    (should (three-digit-pair? [100 999]))
-    (should-not (three-digit-pair? [99 200]))
-    (should-not (three-digit-pair? [200 1000])))
+    (should (four-digit-pair? [100 999]))
+    (should-not (four-digit-pair? [99 200]))
+    (should-not (four-digit-pair? [200 1000])))
   )
 
 (describe "Greatest Palindromic number product of two three digit numbers"

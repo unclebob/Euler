@@ -7,7 +7,7 @@
     (Integer/parseInt (str/join [prefix suffix]))))
 
 (defn make-palindromes []
-  (for [n (reverse (range 100 1000))]
+  (for [n (reverse (range 1000 10000))]
         (make-palindrome n)))
 
 (defn factor-pairs [n]
@@ -18,16 +18,16 @@
                   nil))]
     (remove nil? pairs)))
 
-(defn three-digit-pair? [[a b]]
-  (and (< 99 a 1000)
-       (< 99 b 1000)))
+(defn four-digit-pair? [[a b]]
+  (and (< 999 a 10000)
+       (< 999 b 10000)))
 
 (defn find-greatest-palindrome []
   (loop [palindromes (doall (make-palindromes))]
     (if (empty? palindromes)
       nil
       (let [pairs (doall (factor-pairs (first palindromes)))
-            good-pairs (doall (filter three-digit-pair? pairs))]
+            good-pairs (doall (filter four-digit-pair? pairs))]
         (if (empty? good-pairs)
           (recur (rest palindromes))
           [(first palindromes) (first good-pairs)])))
@@ -35,14 +35,14 @@
   )
 
 (defn fast-find-greatest-palindrome []
-  (loop [seed 999
-         palindrome 999999
-         factor 999]
+  (loop [seed 9999
+         palindrome 99999999
+         factor 9999]
     (if (and
           (zero? (rem palindrome factor))
-          (> 999 (quot palindrome factor)))
+          (> 9999 (quot palindrome factor)))
       palindrome
-      (if (> 999 (quot palindrome factor))
+      (if (> 9999 (quot palindrome factor))
         (recur seed palindrome (dec factor))
-        (recur (dec seed) (make-palindrome (dec seed)) 999)))
+        (recur (dec seed) (make-palindrome (dec seed)) 9999)))
     ))
