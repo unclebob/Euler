@@ -23,11 +23,11 @@
        (< 999 b 10000)))
 
 (defn find-greatest-palindrome []
-  (loop [palindromes (doall (make-palindromes))]
+  (loop [palindromes (make-palindromes)]
     (if (empty? palindromes)
       nil
-      (let [pairs (doall (factor-pairs (first palindromes)))
-            good-pairs (doall (filter four-digit-pair? pairs))]
+      (let [pairs (factor-pairs (first palindromes))
+            good-pairs (filter four-digit-pair? pairs)]
         (if (empty? good-pairs)
           (recur (rest palindromes))
           [(first palindromes) (first good-pairs)])))
