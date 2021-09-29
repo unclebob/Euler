@@ -33,3 +33,16 @@
           [(first palindromes) (first good-pairs)])))
     )
   )
+
+(defn fast-find-greatest-palindrome []
+  (loop [seed 999
+         palindrome 999999
+         factor 999]
+    (if (and
+          (zero? (rem palindrome factor))
+          (> 999 (quot palindrome factor)))
+      palindrome
+      (if (> 999 (quot palindrome factor))
+        (recur seed palindrome (dec factor))
+        (recur (dec seed) (make-palindrome (dec seed)) 999)))
+    ))
