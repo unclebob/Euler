@@ -60,3 +60,12 @@
         :else
         (recur factors n (inc divisor)))
       factors)))
+
+(defn factor-list [n]
+  (loop [factor 999 factors []]
+    (if (zero? factor)
+      factors
+      (if (zero? (mod n factor))
+        (recur (dec factor) (conj factors [factor (quot n factor)]))
+        (recur (dec factor) factors)
+        ))))
