@@ -19,7 +19,13 @@
         (recur factors n (inc divisor)))
       factors)))
 
-(defn lcm [a b] (/ (* a b) (gcd a b)))
+(defn lcm
+  ([a b] (/ (* a b) (gcd a b)))
+  ([ns] (reduce lcm 1N ns)))
 
-(defn smallest-multiple [ns]
-  (reduce lcm 1 ns))
+(defn fac [n] (apply * (range 1N (inc n))))
+
+(defn ratio [n]
+  (let [f (fac n)
+        l (lcm (range 1N (inc n)))]
+    [f l (/ f l)]))
