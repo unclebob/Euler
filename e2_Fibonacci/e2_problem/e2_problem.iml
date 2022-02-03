@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module cursive.leiningen.project.LeiningenProjectsManager.displayName="e2_problem:0.1.0-SNAPSHOT" cursive.leiningen.project.LeiningenProjectsManager.isLeinModule="true" type="JAVA_MODULE" version="4">
+  <component name="BuildSystem">
+    <option name="buildSystemId" value="LEININGEN" />
+    <option name="displayName" value="e2_problem:0.1.0-SNAPSHOT" />
+  </component>
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/classes" />

@@ -80,14 +80,14 @@
     )
   )
 
-(defn square-the-rect [length height]
+(defn square-the-rect [length height f]
   (if (zero? height)
     (println "Rational.")
     (if (> 1 length)
       (println "Irrational")
       (let [n (quot length height)
             r (rem length height)]
-        (println "Squares: " n)
+        (println "Squares: " n " " (/ height f))
         (doseq [_ (range n)]
           (forward height)
           (right 90)
@@ -98,7 +98,7 @@
           (left 90))
         (forward r)
         (right 90)
-        (square-the-rect height r)))))
+        (square-the-rect height r f)))))
 
 (defn square-spiral [a b]
   (let [length (max a b)
@@ -117,7 +117,7 @@
     (weight 2)
     (rect length height)
     (pen-up)
-    (square-the-rect length height)))
+    (square-the-rect length height f)))
 
 (defn flower-spiral [theta]
   (let [petals 250
@@ -149,11 +149,8 @@
         (recur (inc i) (length-f len))))))
 
 (defn turtle-script []
-  (speed 1)
-  (pen-down)
-  (doseq [x (range 4)]
-    (right 90)
-    (forward 100)))
+  (square-spiral 27 21)
+  )
 
 
 (defn setup []
