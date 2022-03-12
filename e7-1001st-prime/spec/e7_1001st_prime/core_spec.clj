@@ -2,10 +2,10 @@
   (:require [speclj.core :refer :all]
             [e7-1001st-prime.core :refer :all]))
 
-;(describe "primes using fast java sieve"
-;  (it "should find distant prime"
-;    (let [primes (fast-primes-up-to 3000000000)]
-;      (should= 0 (nth primes 100000000)))))
+(describe "primes using fast java sieve"
+  (it "should find distant prime"
+    (let [primes (fast-primes-up-to 200000N)]
+      (should= 0 (nth primes 10000)))))
 
 ;(describe "primes using slow clojure sieve"
 ;  (it "should find distant prime"

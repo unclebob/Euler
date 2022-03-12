@@ -4,22 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sieve {
-  public static List<Integer> primesUpTo(int n) {
+  private static int[] composites;
+
+  public static List<Long> primesUpTo(long n) {
     if (n < 2)
       return new ArrayList<>();
     return sieve(n);
   }
 
-  private static List<Integer> sieve(int n) {
-    List<Integer> primes = new ArrayList<>();
-    boolean[] composites = new boolean[n + 1];
-    for (int candidate = 2; candidate <= n; candidate++) {
-      if (!composites[candidate]) {
+  private static List<Long> sieve(long n) {
+    List<Long> primes = new ArrayList<>();
+    int nwords = (int)(n/32)+1;
+    composites = new int[nwords];
+    for (long candidate = 2; candidate <= n; candidate++) {
+      if (!isComposite(candidate)) {
         primes.add(candidate);
-        for (int multiple = 2 * candidate; multiple <= n; multiple += candidate)
-          composites[multiple] = true;
+        for (long multiple = 2 * candidate; multiple <= n; multiple += candidate)
+          setComposite(multiple);
       }
     }
     return primes;
+  }
+
+  private static void setComposite(long candidate) {
+    int wordIndex = (int) (candidate/32);
+    int bitIndex = (int)(candidate%32);
+    int bit = (1 << bitIndex);
+    composites[wordIndex] |= bit;
+  }
+
+  private static boolean isComposite(long candidate) {
+    int wordIndex = (int) (candidate/32);
+    int theWord = composites[wordIndex];
+    int bitIndex = (int)(candidate%32);
+    int bit = (1 << bitIndex);
+    int result = theWord & bit;
+    return result != 0;
   }
 }
