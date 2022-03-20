@@ -33,6 +33,8 @@
         (recur primes (inc i))
         (recur (conj primes i) (inc i))))))
 
+(declare find-repeating-pattern)
+
 (defn sieve [n]
   (let [composites (make-array Boolean/TYPE (inc n))
         limit (int (Math/sqrt n))]
@@ -43,6 +45,7 @@
           (recur (inc candidate))
           (do (when (<= candidate limit)
                 (mark-multiples composites candidate n))
+              ;(prn candidate (find-repeating-pattern (vec composites)))
               (recur (inc candidate))))))))
 
 (defn get-primes-up-to [n]
@@ -77,4 +80,45 @@
      (lazy-seq
        (cons this-prime
              (primes next-prime (conj current-primes next-prime)))
-             ))))
+       ))))
+
+(defn is-repeat? [i j bools]
+  (let [n (count bools)]
+    (loop [i i
+           j j]
+      (if (>= j n)
+        true
+        (if (= (nth bools i) (nth bools j))
+          (recur (inc i) (inc j))
+          false)))))
+
+(defn find-repeating-pattern
+  ([bools]
+   (find-repeating-pattern
+     (if (vector? bools)
+       (into-array Boolean/TYPE bools)
+       bools)
+     0))
+  ([bools pos]
+   (let [n (count bools)]
+     (if (or (< n 2) (> pos 30))
+       [0 0]
+       (loop [period 1]
+         (if (> period (/ n 2))
+           (find-repeating-pattern (rest bools) (inc pos))
+           (if (is-repeat? 0 period bools)
+             [pos period]
+             (recur (inc period)))))))
+   ))
+
+(defn gcd [a b]
+  (if (zero? b)
+    a
+    (gcd b (mod a b))))
+
+(defn lcm
+  ([a b]
+   (/ (* a b) (gcd a b)))
+  ([ns]
+   (reduce lcm 1N ns))
+  )

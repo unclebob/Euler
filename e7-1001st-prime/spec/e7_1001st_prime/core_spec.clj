@@ -2,10 +2,10 @@
   (:require [speclj.core :refer :all]
             [e7-1001st-prime.core :refer :all]))
 
-(describe "primes using fast java sieve"
-  (it "should find distant prime"
-    (let [primes (fast-primes-up-to 200000N)]
-      (should= 0 (nth primes 10000)))))
+;(describe "primes using fast java sieve"
+;  (it "should find distant prime"
+;    (let [primes (fast-primes-up-to 200000N)]
+;      (should= 0 (nth primes 10000)))))
 
 ;(describe "primes using slow clojure sieve"
 ;  (it "should find distant prime"
@@ -45,3 +45,52 @@
 ;  (it "should find distant prime"
 ;    (let [primes (primes)]
 ;      (should= 0 (nth primes 100000)))))
+
+(describe "find repeats in the sieve"
+  (it "finds the degenerate repeat"
+    (should= [0 0] (find-repeating-pattern [])))
+
+  (it "finds single and double patterns"
+    (should= [0 0] (find-repeating-pattern [true]))
+    (should= [0 0] (find-repeating-pattern [true false]))
+    (should= [0 0] (find-repeating-pattern [false true]))
+    (should= [0 1] (find-repeating-pattern [true true]))
+    )
+
+  (it "finds triple patterns"
+    (should= [0 1] (find-repeating-pattern [false false false]))
+    (should= [0 0] (find-repeating-pattern [false false true]))
+    (should= [0 0] (find-repeating-pattern [false true false]))
+    (should= [1 1] (find-repeating-pattern [false true true]))
+    (should= [1 1] (find-repeating-pattern [true false false]))
+    (should= [0 0] (find-repeating-pattern [true false true]))
+    (should= [0 0] (find-repeating-pattern [true true false]))
+    (should= [0 1] (find-repeating-pattern [true true true])))
+
+  (it "finds quad patterns"
+    (should= [0 1] (find-repeating-pattern [false false false false]))
+    (should= [0 0] (find-repeating-pattern [false false false true]))
+    (should= [0 0] (find-repeating-pattern [false false true false]))
+    (should= [2 1] (find-repeating-pattern [false false true true]))
+    (should= [2 1] (find-repeating-pattern [false true false false]))
+    (should= [0 2] (find-repeating-pattern [false true false true]))
+    (should= [0 0] (find-repeating-pattern [false true true false]))
+    (should= [1 1] (find-repeating-pattern [false true true true]))
+    (should= [1 1] (find-repeating-pattern [true false false false]))
+    (should= [0 0] (find-repeating-pattern [true false false true]))
+    (should= [0 2] (find-repeating-pattern [true false true false]))
+    (should= [2 1] (find-repeating-pattern [true false true true]))
+    (should= [2 1] (find-repeating-pattern [true true false false]))
+    (should= [0 0] (find-repeating-pattern [true true false true]))
+    (should= [0 0] (find-repeating-pattern [true true true false]))
+    (should= [0 1] (find-repeating-pattern [true true true true])))
+
+  (it "detects repeats"
+    (should-not (is-repeat? 0 1 [true false]))
+    (should (is-repeat? 0 1 [true true]))
+    (should-not (is-repeat? 0 2 [false true true false]))
+
+    (should (is-repeat? 0 2 [false true false true false]))
+
+    )
+  )
