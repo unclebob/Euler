@@ -30,8 +30,12 @@
 (describe "find largest product"
   (it "finds largest product of 4"
     (let [data (-> "data.txt" slurp parse-input string->digits)]
-      (should= 5832 (find-largest-product 4 data))))
+      (should= [5832 [9 9 8 9]] (find-largest-product 4 data))))
 
   (it "finds largest product of 13"
     (let [data (-> "data.txt" slurp parse-input string->digits)]
-      (should= 23514624000 (find-largest-product 13 data)))))
+      (should= [23514624000 [5 5 7 6 6 8 9 6 6 4 8 9 5]] (find-largest-product 13 data))))
+
+  (it "finds largest product of 30"
+      (let [data (-> "data.txt" slurp parse-input string->digits)]
+        (should= [nil nil] (find-largest-product 30 data)))))

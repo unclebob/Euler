@@ -18,5 +18,9 @@
 
 (defn find-largest-product [n digits]
   (let [groups (gather-groups n digits)
-        products (map #(reduce * %) groups)]
-    (apply max products)))
+        products (map #(reduce * %) groups)
+        pairs (apply hash-map (interleave products groups))
+        max-product (apply max products)
+        group (get pairs max-product)
+        ]
+    [max-product group]))
