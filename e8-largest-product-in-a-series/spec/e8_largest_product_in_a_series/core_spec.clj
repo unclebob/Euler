@@ -38,4 +38,10 @@
 
   (it "finds largest product of 30"
       (let [data (-> "data.txt" slurp parse-input string->digits)]
-        (should= [nil nil] (find-largest-product 30 data)))))
+        (should= 374476218826752000000N (first (find-largest-product 30 data)))))
+
+  (it "finds largest product of 100"
+        (let [data (-> "data.txt" slurp parse-input string->digits)]
+          (should= [nil nil] (find-largest-product 100 data))))
+
+  )
