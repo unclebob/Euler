@@ -27,21 +27,31 @@
     (should= [[1] [2] [3]] (gather-groups 1 [1 2 3]))
     (should= [[1 2] [2 3]] (gather-groups 2 [1 2 3]))))
 
+
+(def data (-> "data.txt" slurp parse-input string->digits))
+
 (describe "find largest product"
   (it "finds largest product of 4"
-    (let [data (-> "data.txt" slurp parse-input string->digits)]
-      (should= [5832 [9 9 8 9]] (find-largest-product 4 data))))
+    (should= [5832 [9 9 8 9]] (find-largest-product 4 data)))
 
   (it "finds largest product of 13"
-    (let [data (-> "data.txt" slurp parse-input string->digits)]
-      (should= [23514624000 [5 5 7 6 6 8 9 6 6 4 8 9 5]] (find-largest-product 13 data))))
+    (should= [23514624000 [5 5 7 6 6 8 9 6 6 4 8 9 5]] (find-largest-product 13 data)))
 
   (it "finds largest product of 30"
-      (let [data (-> "data.txt" slurp parse-input string->digits)]
-        (should= 374476218826752000000N (first (find-largest-product 30 data)))))
+    (should= 374476218826752000000N (first (find-largest-product 30 data))))
 
   (it "finds largest product of 100"
-        (let [data (-> "data.txt" slurp parse-input string->digits)]
-          (should= [nil nil] (find-largest-product 100 data))))
-
+    (should= 0 (first (find-largest-product 100 data))))
   )
+
+(describe "finding longest strings"
+  (it "finds longest non-zero product"
+    (let [[product group] (find-longest-product data)]
+      (should= 2412446685431734624320887406251212800000000N product)
+      (should= 69 (count group))
+
+      )
+    )
+  )
+
+

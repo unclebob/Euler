@@ -21,6 +21,15 @@
         products (map #(reduce *' %) groups)
         pairs (apply hash-map (interleave products groups))
         max-product (apply max products)
-        group (get pairs max-product)
-        ]
+        group (get pairs max-product)]
     [max-product group]))
+
+(defn find-longest-product [digits]
+  (loop [n 1
+         result []]
+    (let [[product group] (find-largest-product n digits)]
+      (if (zero? product)
+        result
+        (recur (inc n) [product group])))
+    )
+  )
