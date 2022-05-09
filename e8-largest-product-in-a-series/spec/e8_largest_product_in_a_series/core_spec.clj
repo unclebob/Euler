@@ -31,6 +31,8 @@
 (def data (-> "data.txt" slurp parse-input string->digits))
 
 (describe "find largest product"
+  (it "finds largest product of 2"
+    (should= [6 [2 3]] (find-largest-product 2 [1 1 2 3])))
   (it "finds largest product of 4"
     (should= [5832 [9 9 8 9]] (find-largest-product 4 data)))
 
