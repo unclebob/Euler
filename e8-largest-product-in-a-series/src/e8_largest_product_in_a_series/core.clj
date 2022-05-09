@@ -16,13 +16,21 @@
       groups
       (recur (rest items) (conj groups (take group-size items))))))
 
+(def logs (map #(Math/log %) (range 10)))
+
+(defn log-of-group [group]
+  (map #(nth logs %) group))
+
 (defn find-largest-product [n digits]
   (let [groups (gather-groups n digits)
-        products (map #(reduce *' %) groups)
-        pairs (apply hash-map (interleave products groups))
-        max-product (apply max products)
-        group (get pairs max-product)]
-    [max-product group]))
+        groups (filter #(not-any? zero? %) groups)]
+    (if (empty? groups)
+      [0 []]
+      (let [sums (map #(reduce + (log-of-group %)) groups)
+            pairs (apply hash-map (interleave sums groups))
+            max-sum (apply max sums)
+            group (get pairs max-sum)]
+        [(reduce *' group) group]))))
 
 (defn find-longest-product [digits]
   (loop [n 1
