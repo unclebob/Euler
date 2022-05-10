@@ -36,8 +36,8 @@
           pmax (max pmax p)
           group (if (= p pmax) (take n digits) group)
           first-digit (first digits)
-          rest-digits (rest digits)
-          next-n (take n rest-digits)]
+          rest-digits (doall (rest digits))
+          next-n (doall (take n rest-digits))]
       (cond
         (>= n (count digits))
         [pmax group]
