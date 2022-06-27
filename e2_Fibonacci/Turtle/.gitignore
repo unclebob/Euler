@@ -1,6 +1,0 @@
-.idea
-.lein-repl-history
-target/
-*.iml
-**/*.zip
-
