@@ -1,2 +1,0 @@
-Euler Project in Clojure.
-
